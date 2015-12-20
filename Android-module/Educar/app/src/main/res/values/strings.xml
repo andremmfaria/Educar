@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Educar</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="go">VAI!!!</string>
+    <string name="new_element">Novo Elemento</string>
+    <string name="execution_queue">Fila de Execução</string>
+    <string name="function_execution_queue">Fila de Função</string>
+    <string name="command">Digite o Comando</string>
+    <string name="forward">Forward</string>
+    <string name="back">Back</string>
+    <string name="right">Right</string>
+    <string name="left">Left</string>
+    <string name="stop">Stop</string>
+    <string name="clear">Limpar</string>
+    <string name="function">Function</string>
+</resources>

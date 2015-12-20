@@ -1,0 +1,29 @@
+Wire Pin Colors SHEET
+
+Motor Drivers:
+->Right Motors
+Pin 6 Signal	        : Blue		: EnA
+Pin 4 Signal	        : Brown 	: IN1
+Pin 5 Signal	        : Yellow 	: IN2
+->Left Motors
+Pin 9 Signal	        : Green 	: EnB
+Pin 7 Signal	        : White 	: IN3
+Pin 8 Signal	        : Gray		: IN4
+
+Tracking sensor:
+Pin 10 Signal	        : Green 	: Left Sensor
+Pin 10 Vcc		: Red		: Vcc
+Pin 10 GND		: Black		: GND
+Pin 11 Signal	        : Orange	: Middle Sensor
+Pin 11 Vcc		: Red		: Vcc
+Pin 11 GND		: Black		: GND
+Pin 12 Signal	        : Purple	: Right Sensor
+Pin 12 Vcc		: Red		: Vcc
+Pin 12 GND		: Black		: GND
+
+Bluetooth radio:
+Pin 2 Signal(TX)        : Yellow        : RX
+Pin 3 Signal(RX)        : Blue          : TX
+Pin 3 Vcc               : Orange        : Vcc
+Pin 3 GND               : Purple        : GND
+

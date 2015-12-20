@@ -1,0 +1,86 @@
+//Arduino//*******************************
+int MotorRight1=5;
+int MotorRight2=6;
+int MotorLeft1=10;
+int MotorLeft2=11;
+  
+  
+void setup()
+{  
+  Serial.begin(9600);
+  pinMode(MotorRight1, OUTPUT);  // 8 (PWM)
+  pinMode(MotorRight2, OUTPUT);  //  9 (PWM)
+  pinMode(MotorLeft1,  OUTPUT);  //  10 (PWM) 
+  pinMode(MotorLeft2,  OUTPUT);  // 11 (PWM)
+}
+
+void go()// {
+        digitalWrite(MotorRight1,LOW);
+        digitalWrite(MotorRight2,HIGH);
+        digitalWrite(MotorLeft1,LOW);
+        digitalWrite(MotorLeft2,HIGH);
+       
+}
+
+void left() //
+{
+      digitalWrite(MotorRight1,HIGH);
+      digitalWrite(MotorRight2,LOW);
+      digitalWrite(MotorLeft1,LOW);
+      digitalWrite(MotorLeft2,HIGH);
+  
+}
+void right() //
+{
+      digitalWrite(MotorRight1,LOW);
+      digitalWrite(MotorRight2,HIGH);
+      digitalWrite(MotorLeft1,HIGH);
+      digitalWrite(MotorLeft2,LOW);
+     
+} 
+void stop() //
+{
+     digitalWrite(MotorRight1,LOW);
+     digitalWrite(MotorRight2,LOW);
+     digitalWrite(MotorLeft1,LOW);
+     digitalWrite(MotorLeft2,LOW);
+    
+}
+void back() //
+{
+        digitalWrite(MotorRight1,HIGH);
+        digitalWrite(MotorRight2,LOW);
+        digitalWrite(MotorLeft1,HIGH);
+        digitalWrite(MotorLeft2,LOW);;
+      
+}
+        
+void loop()
+{
+  char val = Serial.read();
+  Serial.write(val);
+  if (-1 != val) {
+    if ('f' == val)
+    go();
+    else if ('a' ==val)
+    left();
+    else if ('c' ==val)
+    stop();
+    else if ('d' == val)
+    right();
+    else if ('e' ==val)
+    stop();
+    else if ('b' == val)
+    back();
+    else if ('t' == val)
+      stop();
+    delay(500);
+    }
+  else
+  {
+    //stop();
+    delay(500);
+  }
+}  
+
+
