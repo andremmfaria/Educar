@@ -6,6 +6,10 @@ package Objects;
 public class QueueElement {
     private String command;
 
+    public QueueElement(String s) {
+        command = s;
+    }
+
     public String getCommand() {
         return command;
     }

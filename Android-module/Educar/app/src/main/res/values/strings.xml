@@ -14,4 +14,6 @@
     <string name="stop">Stop</string>
     <string name="clear">Limpar</string>
     <string name="function">Function</string>
+    <string name="delcommand">Delete command</string>
+    <string name="ConnectBluetooth">ConBlt</string>
 </resources>

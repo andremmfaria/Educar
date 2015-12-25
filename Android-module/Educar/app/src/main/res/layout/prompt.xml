@@ -6,13 +6,6 @@
     android:padding="10dp"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/txtvPrompt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/command"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -26,7 +19,6 @@
         android:layout_height="wrap_content"
         android:text="@string/forward"
         android:id="@+id/btnFoward"
-        android:layout_below="@+id/txtvPrompt"
         android:layout_centerHorizontal="true" />
 
     <Button
@@ -51,6 +43,14 @@
         android:text="@string/back"
         android:id="@+id/btnBack"
         android:layout_below="@+id/btnStop"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/delcommand"
+        android:id="@+id/btnDelCommand"
+        android:layout_below="@+id/btnBack"
         android:layout_centerHorizontal="true" />
 
 </RelativeLayout>
