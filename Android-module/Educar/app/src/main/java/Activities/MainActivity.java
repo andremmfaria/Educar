@@ -3,6 +3,8 @@ package Activities;
 import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -11,6 +13,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import Objects.QueueElement;
 import br.andremmfaria.projetofinal.educar.R;
@@ -57,10 +60,8 @@ public class MainActivity extends AppCompatActivity {
         initializeVariables();
 
         normalQueue();
+
         functionQueue();
-
-
-
     }
 
     @Override
@@ -77,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
         bluetoothActivity.pause();
     }
 
-    private String setDirectionOrKill()
+    private String setDirectionNormalQueue()
     {
         final String[] queue = new String[1];
         LayoutInflater li = getLayoutInflater();
@@ -120,7 +121,68 @@ public class MainActivity extends AppCompatActivity {
         view.findViewById(R.id.btnDelCommand).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                queue[0] = null;
+                queue[0] = "N";
+                alerta.dismiss();
+            }
+        });
+        view.findViewById(R.id.btnFunction).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                queue[0] = "F";
+                alerta.dismiss();
+            }
+        });
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setView(view);
+        alerta = builder.create();
+        alerta.show();
+        return queue[0];
+    }
+
+    private String setDirectionFunctionQueue()
+    {
+        final String[] queue = new String[1];
+        LayoutInflater li = getLayoutInflater();
+        View view = li.inflate(R.layout.prompt_function, null);
+        view.findViewById(R.id.btnFoward).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                queue[0] = "W";
+                alerta.dismiss();
+            }
+        });
+        view.findViewById(R.id.btnBack).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                queue[0] = "S";
+                alerta.dismiss();
+            }
+        });
+        view.findViewById(R.id.btnStop).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                queue[0] = "Q";
+                alerta.dismiss();
+            }
+        });
+        view.findViewById(R.id.btnLeft).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                queue[0] = "A";
+                alerta.dismiss();
+            }
+        });
+        view.findViewById(R.id.btnRight).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                queue[0] = "D";
+                alerta.dismiss();
+            }
+        });
+        view.findViewById(R.id.btnDelCommand).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                queue[0] = "N";
                 alerta.dismiss();
             }
         });
@@ -151,12 +213,30 @@ public class MainActivity extends AppCompatActivity {
         imgBtnFunction4 = (ImageButton) findViewById(R.id.imgButtonFunction4);
 
         imgBtnGo = (ImageButton) findViewById(R.id.imgBtnGo);
+        imgBtnGo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                for(QueueElement e : NormalQueue)
+                {
+                    if(e.getCommand().equals("F"))
+                    {
+                        for(QueueElement f : FunctionQueue)
+                        {
+                            bluetoothActivity.sendData(f.getCommand());
+                        }
+                    }
+                    bluetoothActivity.sendData(e.getCommand());
+                }
+            }
+        });
 
         btnConnectBluetooth = (Button) findViewById(R.id.btnConnectBluetooth);
         btnConnectBluetooth.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!bluetoothActivity.active) {
+                List<ResolveInfo> list = getPackageManager().queryIntentActivities(
+                        new Intent(getApplicationContext(),BluetoothActivity.class), PackageManager.MATCH_DEFAULT_ONLY);
+                if (list.size() > 0) {
                     Intent i = new Intent(getApplicationContext(), BluetoothActivity.class);
                     startActivity(i);
                     bluetoothActivity.btAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -197,7 +277,9 @@ public class MainActivity extends AppCompatActivity {
                             case "D":
                             {imgBtnQueue0.setImageResource(R.drawable.rightarrow);          break;}
                             case "Q":
-                            {imgBtnQueue0.setImageResource(R.drawable.stop);                break;}
+                            {imgBtnQueue0.setImageResource(R.drawable.pause);                break;}
+                            case "F":
+                            {imgBtnQueue0.setImageResource(R.drawable.stop);               break;}
                             case "N":
                             {imgBtnQueue0.setImageResource(R.drawable.uncheckedcheckbox);   break;}
                         }
@@ -216,7 +298,9 @@ public class MainActivity extends AppCompatActivity {
                             case "D":
                             {imgBtnQueue1.setImageResource(R.drawable.rightarrow);          break;}
                             case "Q":
-                            {imgBtnQueue1.setImageResource(R.drawable.stop);                break;}
+                            {imgBtnQueue1.setImageResource(R.drawable.pause);                break;}
+                            case "F":
+                            {imgBtnQueue1.setImageResource(R.drawable.stop);               break;}
                             case "N":
                             {imgBtnQueue1.setImageResource(R.drawable.uncheckedcheckbox);   break;}
                         }
@@ -235,7 +319,9 @@ public class MainActivity extends AppCompatActivity {
                             case "D":
                             {imgBtnQueue2.setImageResource(R.drawable.rightarrow);          break;}
                             case "Q":
-                            {imgBtnQueue2.setImageResource(R.drawable.stop);                break;}
+                            {imgBtnQueue2.setImageResource(R.drawable.pause);                break;}
+                            case "F":
+                            {imgBtnQueue2.setImageResource(R.drawable.stop);               break;}
                             case "N":
                             {imgBtnQueue2.setImageResource(R.drawable.uncheckedcheckbox);   break;}
                         }
@@ -254,7 +340,9 @@ public class MainActivity extends AppCompatActivity {
                             case "D":
                             {imgBtnQueue3.setImageResource(R.drawable.rightarrow);          break;}
                             case "Q":
-                            {imgBtnQueue3.setImageResource(R.drawable.stop);                break;}
+                            {imgBtnQueue3.setImageResource(R.drawable.pause);                break;}
+                            case "F":
+                            {imgBtnQueue3.setImageResource(R.drawable.stop);               break;}
                             case "N":
                             {imgBtnQueue3.setImageResource(R.drawable.uncheckedcheckbox);   break;}
                         }
@@ -273,7 +361,9 @@ public class MainActivity extends AppCompatActivity {
                             case "D":
                             {imgBtnQueue4.setImageResource(R.drawable.rightarrow);          break;}
                             case "Q":
-                            {imgBtnQueue4.setImageResource(R.drawable.stop);                break;}
+                            {imgBtnQueue4.setImageResource(R.drawable.pause);                break;}
+                            case "F":
+                            {imgBtnQueue4.setImageResource(R.drawable.stop);               break;}
                             case "N":
                             {imgBtnQueue4.setImageResource(R.drawable.uncheckedcheckbox);   break;}
                         }
@@ -292,7 +382,9 @@ public class MainActivity extends AppCompatActivity {
                             case "D":
                             {imgBtnQueue5.setImageResource(R.drawable.rightarrow);          break;}
                             case "Q":
-                            {imgBtnQueue5.setImageResource(R.drawable.stop);                break;}
+                            {imgBtnQueue5.setImageResource(R.drawable.pause);                break;}
+                            case "F":
+                            {imgBtnQueue5.setImageResource(R.drawable.stop);               break;}
                             case "N":
                             {imgBtnQueue5.setImageResource(R.drawable.uncheckedcheckbox);   break;}
                         }
@@ -311,7 +403,9 @@ public class MainActivity extends AppCompatActivity {
                             case "D":
                             {imgBtnQueue6.setImageResource(R.drawable.rightarrow);          break;}
                             case "Q":
-                            {imgBtnQueue6.setImageResource(R.drawable.stop);                break;}
+                            {imgBtnQueue6.setImageResource(R.drawable.pause);                break;}
+                            case "F":
+                            {imgBtnQueue6.setImageResource(R.drawable.stop);               break;}
                             case "N":
                             {imgBtnQueue6.setImageResource(R.drawable.uncheckedcheckbox);   break;}
                         }
@@ -330,7 +424,9 @@ public class MainActivity extends AppCompatActivity {
                             case "D":
                             {imgBtnQueue7.setImageResource(R.drawable.rightarrow);          break;}
                             case "Q":
-                            {imgBtnQueue7.setImageResource(R.drawable.stop);                break;}
+                            {imgBtnQueue7.setImageResource(R.drawable.pause);                break;}
+                            case "F":
+                            {imgBtnQueue7.setImageResource(R.drawable.stop);               break;}
                             case "N":
                             {imgBtnQueue7.setImageResource(R.drawable.uncheckedcheckbox);   break;}
                         }
@@ -349,7 +445,9 @@ public class MainActivity extends AppCompatActivity {
                             case "D":
                             {imgBtnQueue8.setImageResource(R.drawable.rightarrow);          break;}
                             case "Q":
-                            {imgBtnQueue8.setImageResource(R.drawable.stop);                break;}
+                            {imgBtnQueue8.setImageResource(R.drawable.pause);                break;}
+                            case "F":
+                            {imgBtnQueue8.setImageResource(R.drawable.stop);               break;}
                             case "N":
                             {imgBtnQueue8.setImageResource(R.drawable.uncheckedcheckbox);   break;}
                         }
@@ -368,7 +466,9 @@ public class MainActivity extends AppCompatActivity {
                             case "D":
                             {imgBtnQueue9.setImageResource(R.drawable.rightarrow);          break;}
                             case "Q":
-                            {imgBtnQueue9.setImageResource(R.drawable.stop);                break;}
+                            {imgBtnQueue9.setImageResource(R.drawable.pause);                break;}
+                            case "F":
+                            {imgBtnQueue9.setImageResource(R.drawable.stop);               break;}
                             case "N":
                             {imgBtnQueue9.setImageResource(R.drawable.uncheckedcheckbox);   break;}
                         }
@@ -397,7 +497,7 @@ public class MainActivity extends AppCompatActivity {
                             case "D":
                             {imgBtnFunction0.setImageResource(R.drawable.rightarrow);          break;}
                             case "Q":
-                            {imgBtnFunction0.setImageResource(R.drawable.stop);                break;}
+                            {imgBtnFunction0.setImageResource(R.drawable.pause);                break;}
                             case "N":
                             {imgBtnFunction0.setImageResource(R.drawable.uncheckedcheckbox);   break;}
                         }
@@ -416,7 +516,7 @@ public class MainActivity extends AppCompatActivity {
                             case "D":
                             {imgBtnFunction1.setImageResource(R.drawable.rightarrow);          break;}
                             case "Q":
-                            {imgBtnFunction1.setImageResource(R.drawable.stop);                break;}
+                            {imgBtnFunction1.setImageResource(R.drawable.pause);                break;}
                             case "N":
                             {imgBtnFunction1.setImageResource(R.drawable.uncheckedcheckbox);   break;}
                         }
@@ -435,7 +535,7 @@ public class MainActivity extends AppCompatActivity {
                             case "D":
                             {imgBtnFunction2.setImageResource(R.drawable.rightarrow);          break;}
                             case "Q":
-                            {imgBtnFunction2.setImageResource(R.drawable.stop);                break;}
+                            {imgBtnFunction2.setImageResource(R.drawable.pause);                break;}
                             case "N":
                             {imgBtnFunction2.setImageResource(R.drawable.uncheckedcheckbox);   break;}
                         }
@@ -454,7 +554,7 @@ public class MainActivity extends AppCompatActivity {
                             case "D":
                             {imgBtnFunction3.setImageResource(R.drawable.rightarrow);          break;}
                             case "Q":
-                            {imgBtnFunction3.setImageResource(R.drawable.stop);                break;}
+                            {imgBtnFunction3.setImageResource(R.drawable.pause);                break;}
                             case "N":
                             {imgBtnFunction3.setImageResource(R.drawable.uncheckedcheckbox);   break;}
                         }
@@ -473,7 +573,7 @@ public class MainActivity extends AppCompatActivity {
                             case "D":
                             {imgBtnFunction4.setImageResource(R.drawable.rightarrow);          break;}
                             case "Q":
-                            {imgBtnFunction4.setImageResource(R.drawable.stop);                break;}
+                            {imgBtnFunction4.setImageResource(R.drawable.pause);                break;}
                             case "N":
                             {imgBtnFunction4.setImageResource(R.drawable.uncheckedcheckbox);   break;}
                         }
@@ -483,7 +583,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-
 
     private void normalQueue()
     {
@@ -496,7 +595,7 @@ public class MainActivity extends AppCompatActivity {
         imgBtnQueue0.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FunctionQueue.set(0, new QueueElement(setDirectionOrKill()));
+                NormalQueue.get(0).setCommand(setDirectionNormalQueue());
                 reviseQueue(NormalQueue);
             }
         });
@@ -504,7 +603,7 @@ public class MainActivity extends AppCompatActivity {
         imgBtnQueue1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FunctionQueue.set(1, new QueueElement(setDirectionOrKill()));
+                NormalQueue.get(1).setCommand(setDirectionNormalQueue());
                 reviseQueue(NormalQueue);
             }
         });
@@ -512,7 +611,7 @@ public class MainActivity extends AppCompatActivity {
         imgBtnQueue2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FunctionQueue.set(2, new QueueElement(setDirectionOrKill()));
+                NormalQueue.get(2).setCommand(setDirectionNormalQueue());
                 reviseQueue(NormalQueue);
             }
         });
@@ -520,7 +619,7 @@ public class MainActivity extends AppCompatActivity {
         imgBtnQueue3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FunctionQueue.set(3, new QueueElement(setDirectionOrKill()));
+                NormalQueue.get(3).setCommand(setDirectionNormalQueue());
                 reviseQueue(NormalQueue);
             }
         });
@@ -528,7 +627,7 @@ public class MainActivity extends AppCompatActivity {
         imgBtnQueue4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FunctionQueue.set(4, new QueueElement(setDirectionOrKill()));
+                NormalQueue.get(4).setCommand(setDirectionNormalQueue());
                 reviseQueue(NormalQueue);
             }
         });
@@ -536,7 +635,7 @@ public class MainActivity extends AppCompatActivity {
         imgBtnQueue5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FunctionQueue.set(5, new QueueElement(setDirectionOrKill()));
+                NormalQueue.get(5).setCommand(setDirectionNormalQueue());
                 reviseQueue(NormalQueue);
             }
         });
@@ -544,7 +643,7 @@ public class MainActivity extends AppCompatActivity {
         imgBtnQueue6.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FunctionQueue.set(6, new QueueElement(setDirectionOrKill()));
+                NormalQueue.get(6).setCommand(setDirectionNormalQueue());
                 reviseQueue(NormalQueue);
             }
         });
@@ -552,7 +651,7 @@ public class MainActivity extends AppCompatActivity {
         imgBtnQueue7.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FunctionQueue.set(7, new QueueElement(setDirectionOrKill()));
+                NormalQueue.get(7).setCommand(setDirectionNormalQueue());
                 reviseQueue(NormalQueue);
             }
         });
@@ -560,7 +659,7 @@ public class MainActivity extends AppCompatActivity {
         imgBtnQueue8.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FunctionQueue.set(8, new QueueElement(setDirectionOrKill()));
+                NormalQueue.get(8).setCommand(setDirectionNormalQueue());
                 reviseQueue(NormalQueue);
             }
         });
@@ -568,7 +667,7 @@ public class MainActivity extends AppCompatActivity {
         imgBtnQueue9.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FunctionQueue.set(9, new QueueElement(setDirectionOrKill()));
+                NormalQueue.get(9).setCommand(setDirectionNormalQueue());
                 reviseQueue(NormalQueue);
             }
         });
@@ -586,35 +685,35 @@ public class MainActivity extends AppCompatActivity {
         imgBtnFunction0.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FunctionQueue.set(0, new QueueElement(setDirectionOrKill()));
+                FunctionQueue.get(0).setCommand(setDirectionFunctionQueue());
                 reviseQueue(FunctionQueue);
             }
         });
         imgBtnFunction1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FunctionQueue.set(1, new QueueElement(setDirectionOrKill()));
+                FunctionQueue.get(1).setCommand(setDirectionFunctionQueue());
                 reviseQueue(FunctionQueue);
             }
         });
         imgBtnFunction2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FunctionQueue.set(2, new QueueElement(setDirectionOrKill()));
+                FunctionQueue.get(2).setCommand(setDirectionFunctionQueue());
                 reviseQueue(FunctionQueue);
             }
         });
         imgBtnFunction3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FunctionQueue.set(3, new QueueElement(setDirectionOrKill()));
+                FunctionQueue.get(3).setCommand(setDirectionFunctionQueue());
                 reviseQueue(FunctionQueue);
             }
         });
         imgBtnFunction4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FunctionQueue.set(4, new QueueElement(setDirectionOrKill()));
+                FunctionQueue.get(4).setCommand(setDirectionFunctionQueue());
                 reviseQueue(FunctionQueue);
             }
         });

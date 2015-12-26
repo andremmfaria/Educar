@@ -16,4 +16,5 @@
     <string name="function">Function</string>
     <string name="delcommand">Delete command</string>
     <string name="ConnectBluetooth">ConBlt</string>
+    <string name="fct">Function</string>
 </resources>

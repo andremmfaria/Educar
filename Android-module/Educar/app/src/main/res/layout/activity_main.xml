@@ -263,9 +263,9 @@
         android:maxHeight="@dimen/queue_space_margin"
         android:maxWidth="@dimen/queue_space_margin"
         android:adjustViewBounds="true"
-        android:layout_below="@+id/imageView11"
-        android:layout_toRightOf="@+id/imgButtonQueue5"
-        android:layout_toEndOf="@+id/imgButtonQueue5" />
+        android:layout_alignBottom="@+id/imgButtonQueue6"
+        android:layout_toLeftOf="@+id/imgButtonQueue6"
+        android:layout_toStartOf="@+id/imgButtonQueue6" />
 
     <ImageView
         android:layout_width="wrap_content"
@@ -275,9 +275,9 @@
         android:maxHeight="@dimen/queue_space_margin"
         android:maxWidth="@dimen/queue_space_margin"
         android:adjustViewBounds="true"
-        android:layout_below="@+id/imageView10"
-        android:layout_toRightOf="@+id/imgButtonQueue6"
-        android:layout_toEndOf="@+id/imgButtonQueue6" />
+        android:layout_alignBottom="@+id/imgButtonQueue7"
+        android:layout_toLeftOf="@+id/imgButtonQueue7"
+        android:layout_toStartOf="@+id/imgButtonQueue7" />
 
     <ImageView
         android:layout_width="wrap_content"
@@ -287,9 +287,9 @@
         android:maxHeight="@dimen/queue_space_margin"
         android:maxWidth="@dimen/queue_space_margin"
         android:adjustViewBounds="true"
-        android:layout_below="@+id/imageView9"
-        android:layout_toRightOf="@+id/imgButtonQueue7"
-        android:layout_toEndOf="@+id/imgButtonQueue7" />
+        android:layout_alignBottom="@+id/imgButtonQueue8"
+        android:layout_toLeftOf="@+id/imgButtonQueue8"
+        android:layout_toStartOf="@+id/imgButtonQueue8" />
 
     <ImageView
         android:layout_width="wrap_content"
@@ -299,9 +299,9 @@
         android:maxHeight="@dimen/queue_space_margin"
         android:maxWidth="@dimen/queue_space_margin"
         android:adjustViewBounds="true"
-        android:layout_below="@+id/imageView8"
-        android:layout_toRightOf="@+id/imgButtonQueue8"
-        android:layout_toEndOf="@+id/imgButtonQueue8" />
+        android:layout_alignBottom="@+id/imgButtonQueue9"
+        android:layout_toLeftOf="@+id/imgButtonQueue9"
+        android:layout_toStartOf="@+id/imgButtonQueue9" />
 
     <ImageButton
         android:layout_width="wrap_content"
