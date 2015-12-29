@@ -22,10 +22,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name="activities.BluetoothActivity"
-            android:label="Enviando dados"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
 
         <service
             android:name="services.BluetoothService"
