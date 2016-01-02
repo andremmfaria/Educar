@@ -17,4 +17,10 @@
     <string name="delcommand">Delete command</string>
     <string name="ConnectBluetooth">ConBlt</string>
     <string name="fct">Function</string>
+    <string name="title_activity_device_selection">DeviceSelectionActivity</string>
+    <string name="text_list_devices">Devices List</string>
+    <string name="text_pair">Pair</string>
+    <string name="devicename">Device Name</string>
+    <string name="deviceaddress">Device Address</string>
+    <string name="connect">Connect</string>
 </resources>

@@ -1,10 +1,15 @@
 package activities;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -16,21 +21,19 @@ import android.widget.Toast;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.UUID;
+import java.util.Set;
 
-import objects.QueueElement;
 import br.andremmfaria.projetofinal.educar.R;
+import objects.QueueElement;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static final int BLT_MAC_RETURN = 10;
     private static final int REQUEST_ENABLE_BT = 1;
-    public BluetoothAdapter btAdapter = null;
+    private BluetoothAdapter btAdapter = null;
     private BluetoothSocket btSocket = null;
     private OutputStream outStream = null;
-
-    private static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
-
-    private static String address = "98:D3:31:B3:E5:33";
+    private String address = null;
 
     protected ArrayList<QueueElement> NormalQueue = new ArrayList<>();
     protected ArrayList<QueueElement> FunctionQueue = new ArrayList<>();
@@ -38,10 +41,12 @@ public class MainActivity extends AppCompatActivity {
     protected ArrayList<ImageButton> imgBtnsNormalQueue = new ArrayList<>();
     protected ArrayList<ImageButton> imgBtnsFunctionQueue = new ArrayList<>();
 
+    private ArrayList<BluetoothDevice> mDeviceList = new ArrayList<>();
+
     protected Button btnConnectBluetooth;
+    private ProgressDialog mProgressDlg;
     protected ImageButton imgBtnGo;
     protected AlertDialog alerta;
-
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -57,78 +62,55 @@ public class MainActivity extends AppCompatActivity {
         normalQueue();
 
         functionQueue();
-    }
 
-    @Override
-    public void onResume()
-    {
-        super.onResume();
+        IntentFilter filter = new IntentFilter();
 
-        BluetoothDevice device = btAdapter.getRemoteDevice(address);
+        filter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
+        filter.addAction(BluetoothDevice.ACTION_FOUND);
+        filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED);
+        filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
 
-        try
-        {
-            btSocket = device.createRfcommSocketToServiceRecord(MY_UUID);
-        }
-        catch (IOException e)
-        {
-            errorExit("Fatal Error", "In onResume() and socket create failed: " + e.getMessage() + ".");
-        }
-
-        btAdapter.cancelDiscovery();
-
-        try
-        {
-            btSocket.connect();
-        }
-        catch (IOException e)
-        {
-            try
-            {
-                btSocket.close();
-            }
-            catch (IOException e2)
-            {
-                errorExit("Fatal Error", "In onResume() and unable to close socket during connection failure" + e2.getMessage() + ".");
-            }
-        }
-
-        try
-        {
-            outStream = btSocket.getOutputStream();
-        }
-        catch (IOException e)
-        {
-            errorExit("Fatal Error", "In onResume() and output stream creation failed:" + e.getMessage() + ".");
-        }
-
+        registerReceiver(mReceiver, filter);
     }
 
     @Override
     public void onPause()
     {
         super.onPause();
-
-        if (outStream != null)
+        if (btAdapter != null)
         {
-            try
+            if (btAdapter.isDiscovering())
             {
-                outStream.flush();
-            }
-            catch (IOException e)
-            {
-                errorExit("Fatal Error", "In onPause() and failed to flush output stream: " + e.getMessage() + ".");
+                btAdapter.cancelDiscovery();
             }
         }
+    }
 
-        try
+    @Override
+    public void onDestroy()
+    {
+        super.onDestroy();
+        unregisterReceiver(mReceiver);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        if (requestCode == BLT_MAC_RETURN)
         {
-            btSocket.close();
+            if (resultCode == RESULT_OK) {
+                address = data.getStringExtra("MAC_ADDRESS");
+                btConnect();
+            }
+            else if(resultCode == RESULT_CANCELED && address == null)
+            {
+                Toast.makeText(getApplicationContext(),"Try Again", Toast.LENGTH_LONG).show();
+            }
         }
-        catch (IOException e2)
-        {
-            errorExit("Fatal Error", "In onPause() and failed to close socket." + e2.getMessage() + ".");
-        }
+    }
+
+    private void btConnect() {
+        Toast.makeText(getApplicationContext(),address,Toast.LENGTH_LONG).show();
     }
 
     private void initializeVariables()
@@ -154,21 +136,15 @@ public class MainActivity extends AppCompatActivity {
         imgBtnGo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                for (QueueElement e : NormalQueue)
-                {
-                    if(e.getCommand().equals("F"))
-                    {
-                        for (QueueElement f : FunctionQueue)
-                            {
-                                if (!f.getCommand().equals("N"))
-                                {
-                                    sendData(f.getCommand());
-                                }
-                                Toast.makeText(getApplicationContext(), "Enviando fila de funcao", Toast.LENGTH_SHORT).show();
+                for (QueueElement e : NormalQueue) {
+                    if (e.getCommand().equals("F")) {
+                        for (QueueElement f : FunctionQueue) {
+                            if (!f.getCommand().equals("N")) {
+                                sendData(f.getCommand());
                             }
+                            Toast.makeText(getApplicationContext(), "Enviando fila de funcao", Toast.LENGTH_SHORT).show();
                         }
-                    else if (!e.getCommand().equals("N"))
-                    {
+                    } else if (!e.getCommand().equals("N")) {
                         sendData(e.getCommand());
                         Toast.makeText(getApplicationContext(), "Enviando fila normal", Toast.LENGTH_SHORT).show();
                     }
@@ -181,45 +157,18 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v)
             {
-                Toast.makeText(getApplicationContext(),"Reconectando bluetooth", Toast.LENGTH_LONG).show();
+                btAdapter.startDiscovery();
+            }
+        });
 
-                BluetoothDevice device = btAdapter.getRemoteDevice(address);
-
-                try
-                {
-                    btSocket = device.createRfcommSocketToServiceRecord(MY_UUID);
-                }
-                catch (IOException e)
-                {
-                    errorExit("Fatal Error", "In onResume() and socket create failed: " + e.getMessage() + ".");
-                }
-
+        mProgressDlg = new ProgressDialog(this);
+        mProgressDlg.setMessage("Scanning...");
+        mProgressDlg.setCancelable(false);
+        mProgressDlg.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
                 btAdapter.cancelDiscovery();
-
-                try
-                {
-                    btSocket.connect();
-                }
-                catch (IOException e)
-                {
-                    try
-                    {
-                        btSocket.close();
-                    }
-                    catch (IOException e2)
-                    {
-                        errorExit("Fatal Error", "In onResume() and unable to close socket during connection failure" + e2.getMessage() + ".");
-                    }
-                }
-
-                try
-                {
-                    outStream = btSocket.getOutputStream();
-                }
-                catch (IOException e)
-                {
-                    errorExit("Fatal Error", "In onResume() and output stream creation failed:" + e.getMessage() + ".");
-                }
             }
         });
     }
@@ -336,61 +285,61 @@ public class MainActivity extends AppCompatActivity {
         imgBtnsNormalQueue.get(0).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showPopupNormalQueue(0);
+                showDialogNormalQueue(0);
             }
         });
         imgBtnsNormalQueue.get(1).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showPopupNormalQueue(1);
+                showDialogNormalQueue(1);
             }
         });
         imgBtnsNormalQueue.get(2).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showPopupNormalQueue(2);
+                showDialogNormalQueue(2);
             }
         });
         imgBtnsNormalQueue.get(3).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showPopupNormalQueue(3);
+                showDialogNormalQueue(3);
             }
         });
         imgBtnsNormalQueue.get(4).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showPopupNormalQueue(4);
+                showDialogNormalQueue(4);
             }
         });
         imgBtnsNormalQueue.get(5).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showPopupNormalQueue(5);
+                showDialogNormalQueue(5);
             }
         });
         imgBtnsNormalQueue.get(6).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showPopupNormalQueue(6);
+                showDialogNormalQueue(6);
             }
         });
         imgBtnsNormalQueue.get(7).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showPopupNormalQueue(7);
+                showDialogNormalQueue(7);
             }
         });
         imgBtnsNormalQueue.get(8).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showPopupNormalQueue(8);
+                showDialogNormalQueue(8);
             }
         });
         imgBtnsNormalQueue.get(9).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showPopupNormalQueue(9);
+                showDialogNormalQueue(9);
             }
         });
     }
@@ -407,31 +356,31 @@ public class MainActivity extends AppCompatActivity {
         imgBtnsFunctionQueue.get(0).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showPopupFunctionQueue(0);
+                showDialogFunctionQueue(0);
             }
         });
         imgBtnsFunctionQueue.get(1).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showPopupFunctionQueue(1);
+                showDialogFunctionQueue(1);
             }
         });
         imgBtnsFunctionQueue.get(2).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showPopupFunctionQueue(2);
+                showDialogFunctionQueue(2);
             }
         });
         imgBtnsFunctionQueue.get(3).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showPopupFunctionQueue(3);
+                showDialogFunctionQueue(3);
             }
         });
         imgBtnsFunctionQueue.get(4).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showPopupFunctionQueue(4);
+                showDialogFunctionQueue(4);
             }
         });
     }
@@ -457,10 +406,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void showPopupNormalQueue(final int index)
+    private void showDialogNormalQueue(final int index)
     {
         LayoutInflater li = getLayoutInflater();
-        View view = li.inflate(R.layout.prompt, null);
+        View view = li.inflate(R.layout.prompt_normal, null);
         view.findViewById(R.id.btnFoward).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -524,7 +473,7 @@ public class MainActivity extends AppCompatActivity {
         alerta.show();
     }
 
-    private void showPopupFunctionQueue(final int index)
+    private void showDialogFunctionQueue(final int index)
     {
         LayoutInflater li = getLayoutInflater();
         View view = li.inflate(R.layout.prompt_function, null);
@@ -593,41 +542,63 @@ public class MainActivity extends AppCompatActivity {
         }
         catch (IOException e)
         {
-            String msg = "In onResume() and an exception occurred during write: " + e.getMessage();
-            if (address.equals("00:00:00:00:00:00"))
-            {
-                msg = msg + ".\n\nUpdate your server address from 00:00:00:00:00:00 to the correct address on line 37 in the java code";
-            }
-            msg = msg +  ".\n\nCheck that the SPP UUID: " + MY_UUID.toString() + " exists on server.\n\n";
-
-            errorExit("Fatal Error", msg);
+            Toast.makeText(getApplicationContext(),"FCK",Toast.LENGTH_SHORT).show();
         }
     }
 
     public void checkBTState()
     {
-        if(btAdapter==null)
+        if(btAdapter!=null)
         {
-            errorExit("Fatal Error", "BluetoothActivity Not supported. Aborting.");
-        }
-        else
-        {
-            if (btAdapter.isEnabled())
+            if(btAdapter.isEnabled())
             {
-                Toast.makeText(getApplicationContext(), "Bluetooth activated", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Bluetooth already activated", Toast.LENGTH_LONG).show();
             }
             else
             {
                 Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
                 startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+                Toast.makeText(getApplicationContext(), "Bluetooth activated", Toast.LENGTH_LONG).show();
             }
         }
+        else {Toast.makeText(getApplicationContext(),"Bluetooth not supported",Toast.LENGTH_LONG); }
     }
 
-    private void errorExit(String title, String message)
-    {
-        Toast msg = Toast.makeText(getApplicationContext(), title + " - " + message, Toast.LENGTH_SHORT);
-        msg.show();
-        finish();
-    }
+    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+
+            if (BluetoothAdapter.ACTION_STATE_CHANGED.equals(action))
+            {
+                final int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.ERROR);
+
+                if (state == BluetoothAdapter.STATE_ON) {
+                    Toast.makeText(getApplicationContext(), "Enabled", Toast.LENGTH_LONG).show();
+                }
+            }
+            else if (BluetoothAdapter.ACTION_DISCOVERY_STARTED.equals(action)) {
+                Set<BluetoothDevice> pairedDevices = btAdapter.getBondedDevices();
+                mDeviceList = new ArrayList<>();
+                mDeviceList.addAll(pairedDevices);
+
+                mProgressDlg.show();
+            }
+            else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
+                mProgressDlg.dismiss();
+
+                Intent newIntent = new Intent(MainActivity.this, DeviceSelectionActivity.class);
+
+                newIntent.putParcelableArrayListExtra("device.list", mDeviceList);
+
+                startActivityForResult(newIntent, BLT_MAC_RETURN);
+            }
+            else if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+
+                mDeviceList.add(device);
+
+                Toast.makeText(getApplicationContext(),"Found device " + device.getName(),Toast.LENGTH_LONG).show();
+            }
+        }
+    };
 }
