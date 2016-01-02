@@ -22,14 +22,17 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Set;
+import java.util.UUID;
 
 import br.andremmfaria.projetofinal.educar.R;
 import objects.QueueElement;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final int BLT_MAC_RETURN = 10;
+    private static final int BLT_MAC_RETURN = 10;
     private static final int REQUEST_ENABLE_BT = 1;
+    private static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+
     private BluetoothAdapter btAdapter = null;
     private BluetoothSocket btSocket = null;
     private OutputStream outStream = null;
@@ -77,12 +80,23 @@ public class MainActivity extends AppCompatActivity {
     public void onPause()
     {
         super.onPause();
-        if (btAdapter != null)
+        if (btAdapter != null) { if (btAdapter.isDiscovering()) { btAdapter.cancelDiscovery(); } }
+
+        if (outStream != null)
         {
-            if (btAdapter.isDiscovering())
+            try { outStream.flush(); }
+            catch (IOException e)
             {
-                btAdapter.cancelDiscovery();
+                Toast.makeText(getApplicationContext(),"Unable to flush output stream", Toast.LENGTH_LONG).show();
+                e.printStackTrace();
             }
+        }
+
+        try { btSocket.close(); }
+        catch (IOException e2)
+        {
+            Toast.makeText(getApplicationContext(),"Unable to close connection", Toast.LENGTH_LONG).show();
+            e2.printStackTrace();
         }
     }
 
@@ -91,6 +105,19 @@ public class MainActivity extends AppCompatActivity {
     {
         super.onDestroy();
         unregisterReceiver(mReceiver);
+        try { btSocket.close(); }
+        catch (IOException e)
+        {
+            Toast.makeText(getApplicationContext(),"Unable to close connection", Toast.LENGTH_LONG).show();
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        btConnect();
     }
 
     @Override
@@ -109,8 +136,35 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void btConnect() {
-        Toast.makeText(getApplicationContext(),address,Toast.LENGTH_LONG).show();
+    private void btConnect()
+    {
+        BluetoothDevice device = btAdapter.getRemoteDevice(address);
+
+        try { btSocket = device.createRfcommSocketToServiceRecord(MY_UUID); }
+        catch (IOException e)
+        {
+            Toast.makeText(getApplicationContext(),"Unable to create connection based on UUID", Toast.LENGTH_LONG).show();
+            e.printStackTrace();
+        }
+
+        try { btSocket.connect(); }
+        catch (IOException e)
+        {
+            Toast.makeText(getApplicationContext(),"Unable to open connection", Toast.LENGTH_LONG).show();
+            try { btSocket.close(); }
+            catch (IOException e2)
+            {
+                Toast.makeText(getApplicationContext(),"Unable to close connection", Toast.LENGTH_LONG).show();
+                e2.printStackTrace();
+            }
+        }
+
+        try { outStream = btSocket.getOutputStream(); }
+        catch (IOException e)
+        {
+            Toast.makeText(getApplicationContext(),"Unable to get output stream", Toast.LENGTH_LONG).show();
+            e.printStackTrace();
+        }
     }
 
     private void initializeVariables()
