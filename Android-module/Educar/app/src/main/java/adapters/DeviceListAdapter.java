@@ -18,7 +18,6 @@ import br.andremmfaria.projetofinal.educar.R;
 public class DeviceListAdapter extends BaseAdapter{
 	private LayoutInflater mInflater;
 	private List<BluetoothDevice> mData;
-	private OnPairButtonClickListener mPairListener;
 	private OnConnectButtonClickListener mConnListener;
 
 	public DeviceListAdapter(Context context) {
@@ -27,10 +26,6 @@ public class DeviceListAdapter extends BaseAdapter{
 
 	public void setData(List<BluetoothDevice> data) {
 		mData = data;
-	}
-
-	public void setPairListener(OnPairButtonClickListener listener) {
-		mPairListener = listener;
 	}
 
 	public void setConnListener(OnConnectButtonClickListener listener) {
@@ -59,7 +54,6 @@ public class DeviceListAdapter extends BaseAdapter{
 
 			holder.nameTv		= (TextView) convertView.findViewById(R.id.tvName);
 			holder.addressTv 	= (TextView) convertView.findViewById(R.id.tvAddress);
-			holder.pairBtn		= (Button) convertView.findViewById(R.id.btnPair);
 			holder.connBtn		= (Button) convertView.findViewById(R.id.btnConnect);
 
 			convertView.setTag(holder);
@@ -71,15 +65,7 @@ public class DeviceListAdapter extends BaseAdapter{
 
 		holder.nameTv.setText(device.getName());
 		holder.addressTv.setText(device.getAddress());
-		holder.pairBtn.setText((device.getBondState() == BluetoothDevice.BOND_BONDED) ? "Unpair" : "Pair");
-		holder.pairBtn.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				if (mPairListener != null) {
-					mPairListener.onPairButtonClick(position);
-				}
-			}
-		});
+
 		holder.connBtn.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -96,12 +82,7 @@ public class DeviceListAdapter extends BaseAdapter{
 	static class ViewHolder {
 		TextView nameTv;
 		TextView addressTv;
-		TextView pairBtn;
 		TextView connBtn;
-	}
-
-	public interface OnPairButtonClickListener {
-		void onPairButtonClick(int position);
 	}
 
 	public interface OnConnectButtonClickListener {

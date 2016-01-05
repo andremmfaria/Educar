@@ -7,6 +7,6 @@
     <dimen name="queue_space_margin">30dp</dimen>
     <dimen name="function_drop_space_margin">10dp</dimen>
     <dimen name="draggable_size">50dp</dimen>
-    <dimen name="drop_space_size">70dp</dimen>
+    <dimen name="drop_space_size">30dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
 </resources>

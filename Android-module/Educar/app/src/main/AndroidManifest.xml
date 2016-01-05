@@ -26,9 +26,6 @@
             android:name="activities.DeviceSelectionActivity"
             android:label="@string/title_activity_device_selection"
             android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-            </intent-filter>
         </activity>
 
     </application>

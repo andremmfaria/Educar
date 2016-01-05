@@ -38,17 +38,18 @@ public class MainActivity extends AppCompatActivity {
     private OutputStream outStream = null;
     private String address = null;
 
+    private ArrayList<BluetoothDevice> mDeviceList = new ArrayList<>();
+
     protected ArrayList<QueueElement> NormalQueue = new ArrayList<>();
     protected ArrayList<QueueElement> FunctionQueue = new ArrayList<>();
 
     protected ArrayList<ImageButton> imgBtnsNormalQueue = new ArrayList<>();
     protected ArrayList<ImageButton> imgBtnsFunctionQueue = new ArrayList<>();
 
-    private ArrayList<BluetoothDevice> mDeviceList = new ArrayList<>();
-
     protected Button btnConnectBluetooth;
-    private ProgressDialog mProgressDlg;
+    protected ProgressDialog mProgressDlg;
     protected ImageButton imgBtnGo;
+    protected ImageButton imgBtnClear;
     protected AlertDialog alerta;
 
     @Override
@@ -80,23 +81,24 @@ public class MainActivity extends AppCompatActivity {
     public void onPause()
     {
         super.onPause();
-        if (btAdapter != null) { if (btAdapter.isDiscovering()) { btAdapter.cancelDiscovery(); } }
-
-        if (outStream != null)
+        if (address != null)
         {
-            try { outStream.flush(); }
-            catch (IOException e)
+            if (btAdapter != null) { if (btAdapter.isDiscovering()) { btAdapter.cancelDiscovery(); } }
+
+            if (outStream != null)
             {
-                Toast.makeText(getApplicationContext(),"Unable to flush output stream", Toast.LENGTH_LONG).show();
-                e.printStackTrace();
+                try { outStream.flush(); }
+                catch (IOException e) {
+                    Toast.makeText(getApplicationContext(), "Unable to flush output stream", Toast.LENGTH_LONG).show();
+                    e.printStackTrace();
+                }
             }
-        }
 
-        try { btSocket.close(); }
-        catch (IOException e2)
-        {
-            Toast.makeText(getApplicationContext(),"Unable to close connection", Toast.LENGTH_LONG).show();
-            e2.printStackTrace();
+            try { btSocket.close(); }
+            catch (IOException e2) {
+                Toast.makeText(getApplicationContext(), "Unable to close connection", Toast.LENGTH_LONG).show();
+                e2.printStackTrace();
+            }
         }
     }
 
@@ -104,12 +106,14 @@ public class MainActivity extends AppCompatActivity {
     public void onDestroy()
     {
         super.onDestroy();
-        unregisterReceiver(mReceiver);
-        try { btSocket.close(); }
-        catch (IOException e)
-        {
-            Toast.makeText(getApplicationContext(),"Unable to close connection", Toast.LENGTH_LONG).show();
-            e.printStackTrace();
+        if (address != null) {
+            unregisterReceiver(mReceiver);
+            try {
+                btSocket.close();
+            } catch (IOException e) {
+                Toast.makeText(getApplicationContext(), "Unable to close connection", Toast.LENGTH_LONG).show();
+                e.printStackTrace();
+            }
         }
     }
 
@@ -117,7 +121,6 @@ public class MainActivity extends AppCompatActivity {
     public void onResume()
     {
         super.onResume();
-        btConnect();
     }
 
     @Override
@@ -125,11 +128,12 @@ public class MainActivity extends AppCompatActivity {
     {
         if (requestCode == BLT_MAC_RETURN)
         {
-            if (resultCode == RESULT_OK) {
+            if (resultCode == RESULT_OK)
+            {
                 address = data.getStringExtra("MAC_ADDRESS");
                 btConnect();
             }
-            else if(resultCode == RESULT_CANCELED && address == null)
+            else if(resultCode == RESULT_CANCELED)
             {
                 Toast.makeText(getApplicationContext(),"Try Again", Toast.LENGTH_LONG).show();
             }
@@ -147,17 +151,12 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        try { btSocket.connect(); }
-        catch (IOException e)
+        try
         {
-            Toast.makeText(getApplicationContext(),"Unable to open connection", Toast.LENGTH_LONG).show();
-            try { btSocket.close(); }
-            catch (IOException e2)
-            {
-                Toast.makeText(getApplicationContext(),"Unable to close connection", Toast.LENGTH_LONG).show();
-                e2.printStackTrace();
-            }
+            btSocket.connect();
+            if(btSocket.isConnected()) { Toast.makeText(getApplicationContext(),"Connected", Toast.LENGTH_LONG).show(); }
         }
+        catch (IOException e)  { Toast.makeText(getApplicationContext(),"Unable to open connection", Toast.LENGTH_LONG).show(); }
 
         try { outStream = btSocket.getOutputStream(); }
         catch (IOException e)
@@ -190,19 +189,34 @@ public class MainActivity extends AppCompatActivity {
         imgBtnGo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                for (QueueElement e : NormalQueue) {
-                    if (e.getCommand().equals("F")) {
-                        for (QueueElement f : FunctionQueue) {
-                            if (!f.getCommand().equals("N")) {
-                                sendData(f.getCommand());
+                if (btSocket.isConnected()) {
+                    for (QueueElement e : NormalQueue) {
+                        if (e.getCommand().equals("F")) {
+                            for (QueueElement f : FunctionQueue) {
+                                if (!f.getCommand().equals("N")) {
+                                    sendData(f.getCommand());
+                                }
                             }
-                            Toast.makeText(getApplicationContext(), "Enviando fila de funcao", Toast.LENGTH_SHORT).show();
+                        } else if (!e.getCommand().equals("N")) {
+                            sendData(e.getCommand());
                         }
-                    } else if (!e.getCommand().equals("N")) {
-                        sendData(e.getCommand());
-                        Toast.makeText(getApplicationContext(), "Enviando fila normal", Toast.LENGTH_SHORT).show();
                     }
                 }
+                else
+                {
+                    Toast.makeText(getApplicationContext(),"Not Connected",Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        imgBtnClear = (ImageButton) findViewById(R.id.imgBtnClear);
+        imgBtnClear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                for(QueueElement e : NormalQueue) { e.setCommand("N");}
+                reviseNormalQueue();
+                for(QueueElement f : FunctionQueue) { f.setCommand("N");}
+                reviseFunctionQueue();
             }
         });
 
@@ -589,20 +603,17 @@ public class MainActivity extends AppCompatActivity {
     public void sendData(String message)
     {
         byte[] msgBuffer = message.getBytes();
-
-        try
-        {
+        try {
             outStream.write(msgBuffer);
+            Toast.makeText(getApplicationContext(),"Enviando "+message,Toast.LENGTH_SHORT).show();
         }
         catch (IOException e)
-        {
-            Toast.makeText(getApplicationContext(),"FCK",Toast.LENGTH_SHORT).show();
-        }
+        { Toast.makeText(getApplicationContext(),"Falha no envio",Toast.LENGTH_SHORT).show(); }
     }
 
     public void checkBTState()
     {
-        if(btAdapter!=null)
+        if(btAdapter != null)
         {
             if(btAdapter.isEnabled())
             {
@@ -615,15 +626,14 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Bluetooth activated", Toast.LENGTH_LONG).show();
             }
         }
-        else {Toast.makeText(getApplicationContext(),"Bluetooth not supported",Toast.LENGTH_LONG); }
+        else {Toast.makeText(getApplicationContext(),"Bluetooth not supported",Toast.LENGTH_LONG).show(); }
     }
 
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
 
-            if (BluetoothAdapter.ACTION_STATE_CHANGED.equals(action))
-            {
+            if (BluetoothAdapter.ACTION_STATE_CHANGED.equals(action)) {
                 final int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.ERROR);
 
                 if (state == BluetoothAdapter.STATE_ON) {
