@@ -22,10 +22,12 @@
         android:layout_below="@+id/tvTitleNormalQueue"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
+        android:background="@null"
         android:layout_marginLeft="@dimen/queue_drop_space_margin"
         android:maxHeight="@dimen/drop_space_size"
         android:maxWidth="@dimen/drop_space_size"
-        android:adjustViewBounds="true"/>
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter" />
 
     <ImageView
         android:layout_width="wrap_content"
@@ -46,10 +48,12 @@
         android:src="@drawable/checkbox"
         android:maxHeight="@dimen/drop_space_size"
         android:maxWidth="@dimen/drop_space_size"
+        android:background="@null"
         android:adjustViewBounds="true"
         android:layout_alignTop="@+id/imgButtonQueue0"
         android:layout_toRightOf="@+id/imgView0"
-        android:layout_toEndOf="@+id/imgView0" />
+        android:layout_toEndOf="@+id/imgView0"
+        android:scaleType="fitCenter" />
 
     <ImageView
         android:layout_width="wrap_content"
@@ -71,9 +75,11 @@
         android:maxHeight="@dimen/drop_space_size"
         android:maxWidth="@dimen/drop_space_size"
         android:adjustViewBounds="true"
+        android:background="@null"
         android:layout_alignTop="@+id/imageView"
         android:layout_toRightOf="@+id/imageView"
-        android:layout_toEndOf="@+id/imageView" />
+        android:layout_toEndOf="@+id/imageView"
+        android:scaleType="fitCenter" />
 
     <ImageView
         android:layout_width="wrap_content"
@@ -95,9 +101,11 @@
         android:maxHeight="@dimen/drop_space_size"
         android:maxWidth="@dimen/drop_space_size"
         android:adjustViewBounds="true"
+        android:background="@null"
         android:layout_alignTop="@+id/imageView3"
         android:layout_toRightOf="@+id/imageView3"
-        android:layout_toEndOf="@+id/imageView3" />
+        android:layout_toEndOf="@+id/imageView3"
+        android:scaleType="fitCenter" />
 
     <ImageView
         android:layout_width="wrap_content"
@@ -119,9 +127,11 @@
         android:maxHeight="@dimen/drop_space_size"
         android:maxWidth="@dimen/drop_space_size"
         android:adjustViewBounds="true"
+        android:background="@null"
         android:layout_alignTop="@+id/imageView5"
         android:layout_toRightOf="@+id/imageView5"
-        android:layout_toEndOf="@+id/imageView5" />
+        android:layout_toEndOf="@+id/imageView5"
+        android:scaleType="fitCenter" />
 
     <ImageButton
         android:layout_width="wrap_content"
@@ -131,9 +141,11 @@
         android:maxHeight="@dimen/drop_space_size"
         android:maxWidth="@dimen/drop_space_size"
         android:adjustViewBounds="true"
+        android:background="@null"
         android:layout_below="@+id/imageView12"
         android:layout_alignLeft="@+id/imageView12"
-        android:layout_alignStart="@+id/imageView12" />
+        android:layout_alignStart="@+id/imageView12"
+        android:scaleType="fitCenter" />
 
     <ImageView
         android:layout_width="wrap_content"
@@ -191,9 +203,9 @@
         android:maxHeight="@dimen/queue_space_margin"
         android:maxWidth="@dimen/queue_space_margin"
         android:adjustViewBounds="true"
-        android:layout_alignTop="@+id/imageView11"
         android:layout_alignLeft="@+id/imgButtonQueue0"
-        android:layout_alignStart="@+id/imgButtonQueue0" />
+        android:layout_alignStart="@+id/imgButtonQueue0"
+        android:layout_below="@+id/imgButtonQueue0" />
 
     <ImageView
         android:layout_width="wrap_content"
@@ -215,9 +227,11 @@
         android:maxHeight="@dimen/drop_space_size"
         android:maxWidth="@dimen/drop_space_size"
         android:adjustViewBounds="true"
+        android:background="@null"
         android:layout_below="@+id/imageView11"
         android:layout_alignLeft="@+id/imageView11"
-        android:layout_alignStart="@+id/imageView11" />
+        android:layout_alignStart="@+id/imageView11"
+        android:scaleType="fitCenter" />
 
     <ImageButton
         android:layout_width="wrap_content"
@@ -227,9 +241,11 @@
         android:maxHeight="@dimen/drop_space_size"
         android:maxWidth="@dimen/drop_space_size"
         android:adjustViewBounds="true"
+        android:background="@null"
         android:layout_below="@+id/imageView10"
         android:layout_alignLeft="@+id/imageView10"
-        android:layout_alignStart="@+id/imageView10" />
+        android:layout_alignStart="@+id/imageView10"
+        android:scaleType="fitCenter" />
 
     <ImageButton
         android:layout_width="wrap_content"
@@ -239,9 +255,11 @@
         android:maxHeight="@dimen/drop_space_size"
         android:maxWidth="@dimen/drop_space_size"
         android:adjustViewBounds="true"
+        android:background="@null"
         android:layout_below="@+id/imageView9"
         android:layout_alignLeft="@+id/imageView9"
-        android:layout_alignStart="@+id/imageView9" />
+        android:layout_alignStart="@+id/imageView9"
+        android:scaleType="fitCenter" />
 
     <ImageButton
         android:layout_width="wrap_content"
@@ -251,9 +269,11 @@
         android:maxHeight="@dimen/drop_space_size"
         android:maxWidth="@dimen/drop_space_size"
         android:adjustViewBounds="true"
+        android:background="@null"
         android:layout_below="@+id/imageView8"
         android:layout_alignLeft="@+id/imageView8"
-        android:layout_alignStart="@+id/imageView8" />
+        android:layout_alignStart="@+id/imageView8"
+        android:scaleType="fitCenter" />
 
     <ImageView
         android:layout_width="wrap_content"
@@ -312,9 +332,11 @@
         android:maxWidth="@dimen/drop_space_size"
         android:layout_marginLeft="@dimen/queue_drop_space_margin"
         android:adjustViewBounds="true"
+        android:background="@null"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:scaleType="fitCenter" />
 
     <ImageView
         android:layout_width="wrap_content"
@@ -336,9 +358,11 @@
         android:maxHeight="@dimen/drop_space_size"
         android:maxWidth="@dimen/drop_space_size"
         android:adjustViewBounds="true"
+        android:background="@null"
         android:layout_alignTop="@+id/imageView2"
         android:layout_toRightOf="@+id/imageView2"
-        android:layout_toEndOf="@+id/imageView2" />
+        android:layout_toEndOf="@+id/imageView2"
+        android:scaleType="fitCenter" />
 
     <ImageView
         android:layout_width="wrap_content"
@@ -360,9 +384,11 @@
         android:maxHeight="@dimen/drop_space_size"
         android:maxWidth="@dimen/drop_space_size"
         android:adjustViewBounds="true"
+        android:background="@null"
         android:layout_alignTop="@+id/imageView4"
         android:layout_toRightOf="@+id/imageView4"
-        android:layout_toEndOf="@+id/imageView4" />
+        android:layout_toEndOf="@+id/imageView4"
+        android:scaleType="fitCenter" />
 
     <ImageView
         android:layout_width="wrap_content"
@@ -384,9 +410,11 @@
         android:maxHeight="@dimen/drop_space_size"
         android:maxWidth="@dimen/drop_space_size"
         android:adjustViewBounds="true"
+        android:background="@null"
         android:layout_alignTop="@+id/imageView6"
         android:layout_toRightOf="@+id/imageView6"
-        android:layout_toEndOf="@+id/imageView6" />
+        android:layout_toEndOf="@+id/imageView6"
+        android:scaleType="fitCenter" />
 
     <ImageView
         android:layout_width="wrap_content"
@@ -408,9 +436,11 @@
         android:maxHeight="@dimen/drop_space_size"
         android:maxWidth="@dimen/drop_space_size"
         android:adjustViewBounds="true"
+        android:background="@null"
         android:layout_alignTop="@+id/imageView7"
         android:layout_toRightOf="@+id/imageView7"
-        android:layout_toEndOf="@+id/imageView7" />
+        android:layout_toEndOf="@+id/imageView7"
+        android:scaleType="fitCenter" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -429,13 +459,21 @@
         android:src="@drawable/play"
         android:maxHeight="@dimen/drop_space_size"
         android:maxWidth="@dimen/drop_space_size"
+        android:background="@null"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
+<<<<<<< HEAD
         android:layout_toEndOf="@+id/imageView13"
         android:layout_alignTop="@+id/tvTitleFunctionQueue"
         android:layout_alignLeft="@+id/imgBtnClear"
         android:layout_alignStart="@+id/imgBtnClear" />
+=======
+        android:layout_alignLeft="@+id/imgBtnClear"
+        android:layout_alignStart="@+id/imgBtnClear"
+        android:layout_alignTop="@+id/imgButtonFunction4"
+        android:scaleType="fitCenter" />
+>>>>>>> ff36544fc6c15eb687b3fded5f7b7009f6ca2fa9
 
     <ImageButton
         android:layout_width="wrap_content"
@@ -444,6 +482,8 @@
         android:src="@drawable/trash"
         android:maxHeight="@dimen/drop_space_size"
         android:maxWidth="@dimen/drop_space_size"
+        android:scaleType="fitCenter"
+        android:background="@null"
         android:layout_above="@+id/imgBtnGo"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
