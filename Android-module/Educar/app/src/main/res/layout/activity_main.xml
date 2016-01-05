@@ -103,7 +103,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/imageView5"
-        android:src="@drawable/viewleftarrow"
+        android:src="@drawable/viewrightarrow"
         android:maxHeight="@dimen/queue_space_margin"
         android:maxWidth="@dimen/queue_space_margin"
         android:adjustViewBounds="true"
@@ -432,9 +432,10 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_toRightOf="@+id/imageView13"
         android:layout_toEndOf="@+id/imageView13"
-        android:layout_alignTop="@+id/tvTitleFunctionQueue" />
+        android:layout_alignTop="@+id/tvTitleFunctionQueue"
+        android:layout_alignLeft="@+id/imgBtnClear"
+        android:layout_alignStart="@+id/imgBtnClear" />
 
     <ImageButton
         android:layout_width="wrap_content"
@@ -446,9 +447,9 @@
         android:layout_above="@+id/imgBtnGo"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_alignLeft="@+id/imgBtnGo"
-        android:layout_alignStart="@+id/imgBtnGo"
-        android:layout_below="@+id/imageView13" />
+        android:layout_alignLeft="@+id/btnConnectBluetooth"
+        android:layout_alignStart="@+id/btnConnectBluetooth"
+        android:layout_alignTop="@+id/imgButtonQueue9" />
 
     <Button
         android:layout_width="wrap_content"
