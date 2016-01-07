@@ -463,17 +463,10 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-<<<<<<< HEAD
-        android:layout_toEndOf="@+id/imageView13"
-        android:layout_alignTop="@+id/tvTitleFunctionQueue"
-        android:layout_alignLeft="@+id/imgBtnClear"
-        android:layout_alignStart="@+id/imgBtnClear" />
-=======
         android:layout_alignLeft="@+id/imgBtnClear"
         android:layout_alignStart="@+id/imgBtnClear"
         android:layout_alignTop="@+id/imgButtonFunction4"
         android:scaleType="fitCenter" />
->>>>>>> ff36544fc6c15eb687b3fded5f7b7009f6ca2fa9
 
     <ImageButton
         android:layout_width="wrap_content"

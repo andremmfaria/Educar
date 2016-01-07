@@ -14,8 +14,8 @@ char recv;
 int lftsns;
 int mdlsns;
 int rgtsns;
-int vlpna = 60;
-int vlpnb = 60;
+int vlpna = 100;
+int vlpnb = 100;
 int mode = 0;
 
 movement move(MTR_CNTR_PIN_1,MTR_CNTR_PIN_2,MTR_CNTR_PIN_3,
@@ -42,32 +42,24 @@ void loop()
             {
                 case ('W'):
                     {
-                        vlpna = 100;
-                        vlpnb = 100;
                         move.fwd(MTR_CNTR_PIN_1,MTR_CNTR_PIN_2,MTR_CNTR_PIN_3,
                                 MTR_CNTR_PIN_4,MTR_ENAB_PIN_A,MTR_ENAB_PIN_B,vlpna,vlpnb);
                         break;
                     }
                 case ('A'):
                     {
-                        vlpna = 60;
-                        vlpnb = 60;
                         move.lft(MTR_CNTR_PIN_1,MTR_CNTR_PIN_2,MTR_CNTR_PIN_3,
-                                MTR_CNTR_PIN_4,MTR_ENAB_PIN_A,MTR_ENAB_PIN_B,vlpna,vlpnb);
+                                MTR_CNTR_PIN_4,MTR_ENAB_PIN_A,MTR_ENAB_PIN_B,vlpna,0);
                         break;
                     }
                 case ('D'):
                     {
-                        vlpna = 60;
-                        vlpnb = 60;
                         move.rgt(MTR_CNTR_PIN_1,MTR_CNTR_PIN_2,MTR_CNTR_PIN_3,
-                                MTR_CNTR_PIN_4,MTR_ENAB_PIN_A,MTR_ENAB_PIN_B,vlpna,vlpnb);
+                                MTR_CNTR_PIN_4,MTR_ENAB_PIN_A,MTR_ENAB_PIN_B,0,vlpnb);
                         break;
                     }
                 case ('S'):
                     {
-                        vlpna = 100;
-                        vlpnb = 100;
                         move.bck(MTR_CNTR_PIN_1,MTR_CNTR_PIN_2,MTR_CNTR_PIN_3,
                                 MTR_CNTR_PIN_4,MTR_ENAB_PIN_A,MTR_ENAB_PIN_B,vlpna,vlpnb);
                         break;
@@ -78,7 +70,7 @@ void loop()
                         break;
                     }
             }
-            delay(500);
+            delay(1000);
         }
         else
         { 
