@@ -29,6 +29,8 @@ import objects.QueueElement;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final int NORMAL_Q_SIZE = 10;
+    private static final int FUNCTION_Q_SIZE = 5;
     private static final int BLT_MAC_RETURN = 10;
     private static final int REQUEST_ENABLE_BT = 1;
     private static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
@@ -46,8 +48,9 @@ public class MainActivity extends AppCompatActivity {
     protected ArrayList<ImageButton> imgBtnsNormalQueue = new ArrayList<>();
     protected ArrayList<ImageButton> imgBtnsFunctionQueue = new ArrayList<>();
 
-    protected Button btnConnectBluetooth;
+    protected Button btnMode;
     protected ProgressDialog mProgressDlg;
+    protected ImageButton imgBtnConnectBluetooth;
     protected ImageButton imgBtnGo;
     protected ImageButton imgBtnClear;
     protected AlertDialog alerta;
@@ -63,9 +66,9 @@ public class MainActivity extends AppCompatActivity {
 
         initializeVariables();
 
-        normalQueue();
+        initializeNormalQueue();
 
-        functionQueue();
+        initializeFunctionQueue();
 
         IntentFilter filter = new IntentFilter();
 
@@ -185,6 +188,14 @@ public class MainActivity extends AppCompatActivity {
         imgBtnsFunctionQueue.add((ImageButton) findViewById(R.id.imgButtonFunction3));
         imgBtnsFunctionQueue.add((ImageButton) findViewById(R.id.imgButtonFunction4));
 
+        btnMode = (Button) findViewById(R.id.btnMode);
+        btnMode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendData("M");
+            }
+        });
+
         imgBtnGo = (ImageButton) findViewById(R.id.imgBtnGo);
         imgBtnGo.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -220,8 +231,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        btnConnectBluetooth = (Button) findViewById(R.id.btnConnectBluetooth);
-        btnConnectBluetooth.setOnClickListener(new View.OnClickListener() {
+        imgBtnConnectBluetooth = (ImageButton) findViewById(R.id.btnConnectBluetooth);
+        imgBtnConnectBluetooth.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)
             {
@@ -241,216 +252,60 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void reviseNormalQueue()
+    private void initializeNormalQueue()
     {
-        int i;
-        for(i=0;i<10;i++)
-        {
-            String command = NormalQueue.get(i).getCommand();
-            switch (i)
-            {
-                case 0:
-                {
-                    setBtnImageResource(imgBtnsNormalQueue.get(0), command);
-                    break;
-                }
-                case 1:
-                {
-                    setBtnImageResource(imgBtnsNormalQueue.get(1), command);
-                    break;
-                }
-                case 2:
-                {
-                    setBtnImageResource(imgBtnsNormalQueue.get(2), command);
-                    break;
-                }
-                case 3:
-                {
-                    setBtnImageResource(imgBtnsNormalQueue.get(3), command);
-                    break;
-                }
-                case 4:
-                {
-                    setBtnImageResource(imgBtnsNormalQueue.get(4), command);
-                    break;
-                }
-                case 5:
-                {
-                    setBtnImageResource(imgBtnsNormalQueue.get(5), command);
-                    break;
-                }
-                case 6:
-                {
-                    setBtnImageResource(imgBtnsNormalQueue.get(6), command);
-                    break;
-                }
-                case 7:
-                {
-                    setBtnImageResource(imgBtnsNormalQueue.get(7), command);
-                    break;
-                }
-                case 8:
-                {
-                    setBtnImageResource(imgBtnsNormalQueue.get(8), command);
-                    break;
-                }
-                case 9:
-                {
-                    setBtnImageResource(imgBtnsNormalQueue.get(9), command);
-                    break;
-                }
-            }
-
-        }
-    }
-
-    private void reviseFunctionQueue()
-    {
-        int i;
-        for(i=0;i<5;i++)
-        {
-            String command = FunctionQueue.get(i).getCommand();
-            switch (i)
-            {
-                case 0:
-                {
-                    setBtnImageResource(imgBtnsFunctionQueue.get(0), command);
-                    break;
-                }
-                case 1:
-                {
-                    setBtnImageResource(imgBtnsFunctionQueue.get(1), command);
-                    break;
-                }
-                case 2:
-                {
-                    setBtnImageResource(imgBtnsFunctionQueue.get(2), command);
-                    break;
-                }
-                case 3:
-                {
-                    setBtnImageResource(imgBtnsFunctionQueue.get(3), command);
-                    break;
-                }
-                case 4:
-                {
-                    setBtnImageResource(imgBtnsFunctionQueue.get(4), command);
-                    break;
-                }
-            }
-        }
-    }
-
-    private void normalQueue()
-    {
-        while(NormalQueue.size() < 10)
+        while(NormalQueue.size() < NORMAL_Q_SIZE)
         {
             QueueElement e = new QueueElement("N");
             NormalQueue.add(e);
         }
         reviseNormalQueue();
 
-        imgBtnsNormalQueue.get(0).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDialogNormalQueue(0);
-            }
-        });
-        imgBtnsNormalQueue.get(1).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDialogNormalQueue(1);
-            }
-        });
-        imgBtnsNormalQueue.get(2).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDialogNormalQueue(2);
-            }
-        });
-        imgBtnsNormalQueue.get(3).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDialogNormalQueue(3);
-            }
-        });
-        imgBtnsNormalQueue.get(4).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDialogNormalQueue(4);
-            }
-        });
-        imgBtnsNormalQueue.get(5).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDialogNormalQueue(5);
-            }
-        });
-        imgBtnsNormalQueue.get(6).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDialogNormalQueue(6);
-            }
-        });
-        imgBtnsNormalQueue.get(7).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDialogNormalQueue(7);
-            }
-        });
-        imgBtnsNormalQueue.get(8).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDialogNormalQueue(8);
-            }
-        });
-        imgBtnsNormalQueue.get(9).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDialogNormalQueue(9);
-            }
-        });
+        for(int i=0;i<NORMAL_Q_SIZE;i++)
+        {
+            final int finalI = i;
+            imgBtnsNormalQueue.get(finalI).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showDialogNormalQueue(finalI);
+                }
+            });
+        }
     }
 
-    private void functionQueue()
+    private void initializeFunctionQueue()
     {
-        while(FunctionQueue.size() < 5)
+        while(FunctionQueue.size() < FUNCTION_Q_SIZE)
         {
             QueueElement e = new QueueElement("N");
             FunctionQueue.add(e);
         }
         reviseFunctionQueue();
 
-        imgBtnsFunctionQueue.get(0).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDialogFunctionQueue(0);
-            }
-        });
-        imgBtnsFunctionQueue.get(1).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDialogFunctionQueue(1);
-            }
-        });
-        imgBtnsFunctionQueue.get(2).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDialogFunctionQueue(2);
-            }
-        });
-        imgBtnsFunctionQueue.get(3).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDialogFunctionQueue(3);
-            }
-        });
-        imgBtnsFunctionQueue.get(4).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDialogFunctionQueue(4);
-            }
-        });
+        for(int i=0;i<FUNCTION_Q_SIZE;i++)
+        {
+            final int finalI = i;
+            imgBtnsNormalQueue.get(finalI).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showDialogFunctionQueue(finalI);
+                }
+            });
+        }
+    }
+
+    private void reviseNormalQueue()
+    {
+        for(int i=0;i<NORMAL_Q_SIZE;i++) {
+            setBtnImageResource(imgBtnsNormalQueue.get(i), NormalQueue.get(i).getCommand());
+        }
+    }
+
+    private void reviseFunctionQueue()
+    {
+        for(int i=0;i<FUNCTION_Q_SIZE;i++) {
+            setBtnImageResource(imgBtnsFunctionQueue.get(i), FunctionQueue.get(i).getCommand());
+        }
     }
 
     private void setBtnImageResource(ImageButton button, String command)
@@ -470,7 +325,7 @@ public class MainActivity extends AppCompatActivity {
             case "N":
             {button.setImageResource(R.drawable.checkbox);            break;}
             case "F":
-            {button.setImageResource(R.drawable.stop);                break;}
+            {button.setImageResource(R.drawable.function);            break;}
         }
     }
 

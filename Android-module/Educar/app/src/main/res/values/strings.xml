@@ -1,26 +1,12 @@
 <resources>
     <string name="app_name">Educar</string>
-    <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    <string name="go">VAI!!!</string>
-    <string name="new_element">Novo Elemento</string>
     <string name="execution_queue">Fila de Execução</string>
     <string name="function_execution_queue">Fila de Função</string>
-    <string name="command">Digite o Comando</string>
-    <string name="forward">Forward</string>
-    <string name="back">Back</string>
-    <string name="right">Right</string>
-    <string name="left">Left</string>
-    <string name="stop">Stop</string>
-    <string name="clear">Limpar</string>
-    <string name="function">Function</string>
-    <string name="delcommand">Delete command</string>
-    <string name="ConnectBluetooth">ConBlt</string>
-    <string name="fct">Function</string>
     <string name="title_activity_device_selection">DeviceSelectionActivity</string>
     <string name="text_list_devices">Devices List</string>
-    <string name="text_pair">Pair</string>
     <string name="devicename">Device Name</string>
     <string name="deviceaddress">Device Address</string>
     <string name="connect">Connect</string>
+    <string name="mode">MODE</string>
 </resources>

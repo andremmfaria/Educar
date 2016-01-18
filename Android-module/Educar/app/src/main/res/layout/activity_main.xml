@@ -23,6 +23,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:background="@null"
+        android:layout_marginStart="@dimen/queue_drop_space_margin"
         android:layout_marginLeft="@dimen/queue_drop_space_margin"
         android:maxHeight="@dimen/drop_space_size"
         android:maxWidth="@dimen/drop_space_size"
@@ -482,15 +483,33 @@
         android:layout_alignParentEnd="true"
         android:layout_alignLeft="@+id/btnConnectBluetooth"
         android:layout_alignStart="@+id/btnConnectBluetooth"
-        android:layout_alignTop="@+id/imgButtonQueue9" />
+        android:layout_alignTop="@+id/imgButtonQueue21" />
 
-    <Button
+    <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/ConnectBluetooth"
         android:id="@+id/btnConnectBluetooth"
+        android:src="@drawable/bluetooth"
+        android:maxHeight="@dimen/drop_space_size"
+        android:maxWidth="@dimen/drop_space_size"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        android:background="@null"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/mode"
+        android:id="@+id/btnMode"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignLeft="@+id/imgBtnClear"
+        android:layout_alignStart="@+id/imgBtnClear"
+        android:layout_below="@+id/imageView13"
+        android:layout_above="@+id/imgBtnClear" />
 
 </RelativeLayout>

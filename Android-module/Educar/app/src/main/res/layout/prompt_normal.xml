@@ -3,62 +3,103 @@
     android:id="@+id/layout_root"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:padding="10dp"
+    android:padding="@dimen/activity_vertical_margin"
     android:orientation="vertical">
 
-    <Button
+    <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/stop"
         android:id="@+id/btnStop"
+        android:src="@drawable/pause"
+        android:maxHeight="@dimen/drop_space_size"
+        android:maxWidth="@dimen/drop_space_size"
+        android:layout_marginRight="@dimen/queue_drop_space_margin"
+        android:layout_marginLeft="@dimen/queue_drop_space_margin"
+        android:layout_marginTop="@dimen/queue_drop_space_margin"
+        android:layout_marginBottom="@dimen/queue_drop_space_margin"
+        android:background="@null"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
         android:layout_below="@+id/btnFoward"
         android:layout_centerHorizontal="true" />
 
-    <Button
+    <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/forward"
         android:id="@+id/btnFoward"
+        android:src="@drawable/uparrow"
+        android:maxHeight="@dimen/drop_space_size"
+        android:maxWidth="@dimen/drop_space_size"
+        android:background="@null"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
         android:layout_centerHorizontal="true" />
 
-    <Button
+    <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/left"
         android:id="@+id/btnLeft"
+        android:src="@drawable/leftarrow"
+        android:maxHeight="@dimen/drop_space_size"
+        android:maxWidth="@dimen/drop_space_size"
+        android:background="@null"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
         android:layout_alignTop="@+id/btnStop"
-        android:layout_toLeftOf="@+id/btnStop"/>
+        android:layout_toLeftOf="@+id/btnStop"
+        android:layout_toStartOf="@+id/btnStop"/>
 
-    <Button
+    <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/right"
         android:id="@+id/btnRight"
+        android:src="@drawable/rightarrow"
+        android:maxHeight="@dimen/drop_space_size"
+        android:maxWidth="@dimen/drop_space_size"
+        android:background="@null"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
         android:layout_alignTop="@+id/btnStop"
-        android:layout_toRightOf="@+id/btnStop"/>
+        android:layout_toRightOf="@+id/btnStop"
+        android:layout_toEndOf="@+id/btnStop"/>
 
-    <Button
+    <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/back"
         android:id="@+id/btnBack"
+        android:src="@drawable/downarrow"
+        android:maxHeight="@dimen/drop_space_size"
+        android:maxWidth="@dimen/drop_space_size"
+        android:background="@null"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
         android:layout_below="@+id/btnStop"
         android:layout_centerHorizontal="true" />
 
-    <Button
+    <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/delcommand"
         android:id="@+id/btnDelCommand"
+        android:src="@drawable/trash"
+        android:maxHeight="@dimen/drop_space_size"
+        android:maxWidth="@dimen/drop_space_size"
+        android:background="@null"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
         android:layout_below="@+id/btnBack"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
-    <Button
+    <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/fct"
         android:id="@+id/btnFunction"
+        android:src="@drawable/function"
+        android:maxHeight="@dimen/drop_space_size"
+        android:maxWidth="@dimen/drop_space_size"
+        android:background="@null"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
         android:layout_below="@+id/btnBack"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />

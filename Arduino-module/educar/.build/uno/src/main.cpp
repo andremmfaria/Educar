@@ -22,9 +22,10 @@ char recv;
 int lftsns;
 int mdlsns;
 int rgtsns;
-int vlpna = 100;
-int vlpnb = 100;
+int vlpna = 180;
+int vlpnb = 180;
 int mode = 0;
+int dilay = 800;
 
 movement move(MTR_CNTR_PIN_1,MTR_CNTR_PIN_2,MTR_CNTR_PIN_3,
         MTR_CNTR_PIN_4,MTR_ENAB_PIN_A,MTR_ENAB_PIN_B,vlpna,vlpnb);
@@ -57,13 +58,13 @@ void loop()
                 case ('A'):
                     {
                         move.lft(MTR_CNTR_PIN_1,MTR_CNTR_PIN_2,MTR_CNTR_PIN_3,
-                                MTR_CNTR_PIN_4,MTR_ENAB_PIN_A,MTR_ENAB_PIN_B,vlpna,0);
+                                MTR_CNTR_PIN_4,MTR_ENAB_PIN_A,MTR_ENAB_PIN_B,vlpna,vlpnb);
                         break;
                     }
                 case ('D'):
                     {
                         move.rgt(MTR_CNTR_PIN_1,MTR_CNTR_PIN_2,MTR_CNTR_PIN_3,
-                                MTR_CNTR_PIN_4,MTR_ENAB_PIN_A,MTR_ENAB_PIN_B,0,vlpnb);
+                                MTR_CNTR_PIN_4,MTR_ENAB_PIN_A,MTR_ENAB_PIN_B,vlpna,vlpnb);
                         break;
                     }
                 case ('S'):
@@ -77,18 +78,27 @@ void loop()
                         move.stp(MTR_CNTR_PIN_1,MTR_CNTR_PIN_2,MTR_CNTR_PIN_3,MTR_CNTR_PIN_4);
                         break;
                     }
+                case('M'):
+                    {
+                        mode = 1;
+                        break;
+                    }
             }
-            delay(1000);
+            delay(dilay);
         }
         else
         { 
             move.stp(MTR_CNTR_PIN_1,MTR_CNTR_PIN_2,MTR_CNTR_PIN_3,MTR_CNTR_PIN_4);
-            delay(500);
+            delay(dilay);
         }
 
     }
     else if (mode == 1)
     {
+        recv = btserial.read();
+        btserial.write(recv);
+        if(recv == 'M') { mode = 0; }
+
         lftsns = trck.getsensleft(TRK_SENS_PIN_L);
         mdlsns = trck.getsensmidl(TRK_SENS_PIN_M);
         rgtsns = trck.getsensrigt(TRK_SENS_PIN_R);
